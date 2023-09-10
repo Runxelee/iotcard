@@ -4,13 +4,11 @@ on:
   watch:
     types: [started]
 
-on:
-  workflow:
-    schedule:
-      - cron: "0 */6 * * *"
+  schedule:
+    - cron: "0 */6 * * *"
 
 jobs:
-  test_password:
+  post_script:
     runs-on: ubuntu-latest
 
     steps:
@@ -41,5 +39,5 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@v0.6.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.TOKEN }}
       
