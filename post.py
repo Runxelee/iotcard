@@ -75,8 +75,13 @@ def process_password_files_in_directory(directory):
     else:
         file_index = queue_file_path.index([current_data.current_file_path])
 
+    index = 0
+
     # 遍历从curret_file_path后面的所有参数
     for file_path in queue_file_path[file_index:]:
+        if index != 0:
+            current_data.current_line_no = 0
+        index += 1
         with open(file_path[0], "r") as file:
             passwords = file.read().splitlines()
             print(f"Current file: {file_path[0]}")
