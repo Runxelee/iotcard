@@ -50,7 +50,7 @@ def send_post_request(password, line_no, csrf_token, cookie):
     response_json = response.json()
     curent_data.current_file_path, curent_data.current_line_no = curent_data.current_file_path, line_no
 
-    print(f"Current file: {curent_data.current_file_path}")
+    # print(f"Current file: {curent_data.current_file_path}")
 
     # 检查是否为数据过期
     if response_json["code"] == 500 and response_json["msg"] == "\u8bf7\u6c42\u53d1\u751f\u9519\u8bef!":
@@ -62,7 +62,7 @@ def send_post_request(password, line_no, csrf_token, cookie):
         print(response.text)
         return 1
 
-    print(f"Password: {password} Posted.")
+    # print(f"Password: {password} Posted.")
     # print(response.text)
     return 2
 
@@ -76,6 +76,7 @@ def process_password_files_in_directory(directory):
     for file_path in queue_file_path[file_index + 1:]:
         with open(file_path[0], "r") as file:
             passwords = file.read().splitlines()
+            print(f"Current file: {file_path[0]}")
             for password in passwords[curent_data.current_line_no + 1:]:
                 post_status = send_post_request(password, passwords.index(password), csrf_token, cookie)
                 if post_status == 0:
