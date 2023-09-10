@@ -4,22 +4,42 @@ on:
   watch:
     types: [started]
 
+on:
+  workflow:
+    schedule:
+      - cron: "0 */6 * * *"
+
 jobs:
-  run_post_script:
+  test_password:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
 
-    - name: Install dependencies
-      run: pip install requests beautifulsoup4
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
 
-    - name: Run post.py script
-      run: python post.py
+      - name: Run Python script
+        run: python post.py
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "lhx060906@outlook.com"
+          git config --global user.name "Apibot"
+
+      - name: Commit changes
+        run: |
+          git add log.txt queue.txt
+          git commit -m "Update log and queue file"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       
