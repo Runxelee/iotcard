@@ -71,7 +71,7 @@ def process_password_files_in_directory(directory):
     queue_file_path = read_queue_file()
     if curent_data.current_file_path == '':
         curent_data.current_file_path = queue_file_path[0]
-    file_index = queue_file_path[0].index(curent_data.current_file_path)
+    file_index = queue_file_path.index(curent_data.current_file_path)
     # 遍历从curret_file_path后面的所有参数
     for file_path in queue_file_path[file_index + 1:]:
         with open(file_path[0], "r") as file:
