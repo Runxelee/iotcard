@@ -92,10 +92,12 @@ def process_password_files_in_directory(directory):
                     csrf_token, cookie = get_new_csrf_token_and_cookie()
                     new_post_status = send_post_request(password, passwords.index(password), csrf_token, cookie)
                     if new_post_status == 1:
+                        log_password_entry(0)
                         sys.exit(0)
                     elif new_post_status == 2:
                         continue
                 elif post_status == 1:
+                    log_password_entry(0)
                     sys.exit(0)
                 elif post_status == 2:
                     continue
@@ -113,12 +115,19 @@ def get_new_csrf_token_and_cookie():
 
 def log_password_entry(status):
     # 记录日志以便保存记录
+    now = datetime.now()
+    log_entry = f"{now.strftime('%Y-%m-%d %H:%M:%S')} {current_data.current_file_path} {current_data.current_line_no}"
     if status == 1:
+        log_entry = '[Process Timeout Suspended] ' + log_entry
         print("Already been running for 5 hours. Suspended and log recorded.")
     elif status == -1:
+        log_entry = '[Process Ctrl+C Suspended] ' + log_entry
         print("Ctrl+C suspended and log recorded.")
-    now = datetime.now()
-    log_entry = f"[Process Suspended] {now.strftime('%Y-%m-%d %H:%M:%S')} {current_data.current_file_path} {current_data.current_line_no}"
+    elif status == 0:
+        log_entry = '[Correct Password Found] ' + log_entry
+    else:
+        log_entry = '[Process Exception Suspended] ' + log_entry
+
     with open("log.txt", "a") as log_file:
         log_file.write(log_entry + "\n")
 
@@ -154,7 +163,6 @@ def get_password_directory():
 
 def main():
     signal.signal(signal.SIGALRM, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
     signal.alarm(18000)  # 5 hours 18000
 
     if os.path.exists("log.txt"):
