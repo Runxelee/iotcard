@@ -62,7 +62,7 @@ def send_post_request(password, line_no, csrf_token, cookie):
         print(response.text)
         return 1
 
-    print(f"Password: {password} Posted.")
+    # print(f"Password: {password} Posted.")
     # print(response.text)
     return 2
 
