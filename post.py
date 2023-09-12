@@ -85,6 +85,8 @@ def process_password_files_in_directory(directory):
     for file_path in queue_file_path[file_index:]:
         if index != 0:
             current_data.current_line_no = 0
+        elif index == 0 and current_data.current_line_no > 0:
+            current_data.current_line_no -= 1
         index += 1
         with open(file_path[0], "r") as file:
             passwords = file.read().splitlines()

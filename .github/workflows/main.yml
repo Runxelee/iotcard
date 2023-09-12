@@ -35,6 +35,8 @@ jobs:
         run: |
           git add log.txt queue.txt
           git commit -m "Update log and queue file"
+          git config pull.rebase false
+          git pull
 
       - name: Push changes
         uses: ad-m/github-push-action@v0.6.0
