@@ -1,1 +1,2 @@
 [Process Timeout Suspended] 2023-09-11 23:29:17 /home/runner/work/iotcard/iotcard/passwordDict/birth.txt 35736
+[Process Timeout Suspended] 2023-09-12 06:57:43 /home/runner/work/iotcard/iotcard/passwordDict/birth.txt 61268
