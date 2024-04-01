@@ -806,3 +806,4 @@
 [Process Exception Suspended] 2024-03-31 19:15:11 /home/runner/work/iotcard/iotcard/passwordDict/top3000.txt 0
 [Process Exception Suspended] 2024-04-01 02:10:21 /home/runner/work/iotcard/iotcard/passwordDict/top3000.txt 0
 [Process Exception Suspended] 2024-04-01 07:18:10 /home/runner/work/iotcard/iotcard/passwordDict/top3000.txt 0
+[Process Exception Suspended] 2024-04-01 13:27:39 /home/runner/work/iotcard/iotcard/passwordDict/top3000.txt 0
