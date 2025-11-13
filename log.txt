@@ -3169,3 +3169,4 @@
 [Correct Password Found] 2025-11-12 18:32:46 /home/runner/work/iotcard/iotcard/passwordDict/top3000.txt 0
 [Correct Password Found] 2025-11-13 01:56:24 /home/runner/work/iotcard/iotcard/passwordDict/top3000.txt 0
 [Correct Password Found] 2025-11-13 06:36:25 /home/runner/work/iotcard/iotcard/passwordDict/top3000.txt 0
+[Correct Password Found] 2025-11-13 12:52:32 /home/runner/work/iotcard/iotcard/passwordDict/top3000.txt 0
