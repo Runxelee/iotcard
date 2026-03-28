@@ -3706,3 +3706,4 @@
 [Correct Password Found] 2026-03-27 07:16:16 /home/runner/work/iotcard/iotcard/passwordDict/top3000.txt 0
 [Correct Password Found] 2026-03-27 13:18:24 /home/runner/work/iotcard/iotcard/passwordDict/top3000.txt 0
 [Correct Password Found] 2026-03-27 19:02:14 /home/runner/work/iotcard/iotcard/passwordDict/top3000.txt 0
+[Process Exception Suspended] 2026-03-28 02:43:00 /home/runner/work/iotcard/iotcard/passwordDict/top3000.txt 0
